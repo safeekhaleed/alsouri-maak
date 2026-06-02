@@ -1,11 +1,9 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef } from "react";
-import { Animated, Platform, StyleSheet, Text } from "react-native";
+import { Animated, StyleSheet, Text, View } from "react-native";
 
 import { useColors } from "@/hooks/useColors";
-
-const useND = Platform.OS !== "web";
 
 interface Props {
   icon: string;
@@ -24,13 +22,13 @@ export function StatsCard({ icon, value, label, color, bgColor, delay = 0 }: Pro
   useEffect(() => {
     Animated.sequence([
       Animated.delay(delay),
-      Animated.spring(anim, { toValue: 1, useNativeDriver: useND, tension: 80, friction: 8 }),
+      Animated.spring(anim, { toValue: 1, useNativeDriver: true, tension: 80, friction: 8 }),
     ]).start();
 
     Animated.loop(
       Animated.sequence([
-        Animated.timing(pulse, { toValue: 1.05, duration: 1500, useNativeDriver: useND }),
-        Animated.timing(pulse, { toValue: 1, duration: 1500, useNativeDriver: useND }),
+        Animated.timing(pulse, { toValue: 1.05, duration: 1500, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 1, duration: 1500, useNativeDriver: true }),
       ])
     ).start();
   }, []);
@@ -45,7 +43,10 @@ export function StatsCard({ icon, value, label, color, bgColor, delay = 0 }: Pro
     >
       <LinearGradient
         colors={bgColor}
-        style={[styles.card, { borderColor: color + "50", shadowColor: color }]}
+        style={[
+          styles.card,
+          { borderColor: color + "50", shadowColor: color },
+        ]}
       >
         <Feather name={icon as any} size={20} color={color} />
         <Text style={[styles.value, { color }]}>{value}</Text>
